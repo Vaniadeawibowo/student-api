@@ -1,15 +1,18 @@
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+// const morgan = require('morgan'); // Optional: use this if you prefer morgan instead of the custom logger
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-var studentsRouter = require('./routes/students'); // ← Tambahkan ini
+const indexRouter = require('./routes/index');
+const usersRouter = require('./routes/users');
+const studentsRouter = require('./routes/students');
+const logger = require('./middleware/logger'); // Using our own logger middleware
 
-var app = express();
+const app = express();
 
-app.use(logger('dev'));
+// Optional: switch to morgan by commenting this line and uncommenting the morgan line above
+app.use(logger);
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -17,10 +20,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-app.use('/students', studentsRouter); // ← Tambahkan ini juga
-
-const logger = require('morgan');
-app.use(logger('dev'));
-
+app.use('/students', studentsRouter);
 
 module.exports = app;
